@@ -258,7 +258,7 @@ label{font-size:12px;font-weight:600;display:block;margin-bottom:8px}
 .racer-stat{background:#ffffff2e;padding:4px 8px;border-radius:10px;font-size:12px;font-weight:700;white-space:nowrap}
 .racer-stat i{font-style:normal;opacity:.6}
 .flip-btn{border:0;background:#ffffff33;color:white;width:30px;height:30px;border-radius:50%;font-weight:800}
-.racer-stage{padding:14px;min-height:430px}
+.racer-stage{padding:14px}
 .stage-title{font:600 18px var(--heading);margin-bottom:10px}.stage-title small{font:400 11px 'Segoe UI',sans-serif;color:var(--muted);margin-left:6px}
 .kios-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .kios{position:relative;border:2px solid #ebe7d3;border-top:8px solid var(--stall-color,#ccc);border-radius:14px;background:#fffdf6;padding:10px 6px;color:var(--ink);box-shadow:0 4px 0 #e7e1c8;min-height:112px}
@@ -304,7 +304,39 @@ label{font-size:12px;font-weight:600;display:block;margin-bottom:8px}
  .modes,.setup-grid{grid-template-columns:1fr}
  .setup-grid .setup-card{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:center}.setup-title{grid-column:span 2;margin:0}.setup-chars{margin:0}
  .race-track{padding:8px 12px;margin-bottom:10px}.track-head{font-size:15px}.track-budget{display:none}.lanes{display:none}
- .racers{grid-template-columns:minmax(0,1fr);gap:12px}.mode-button span{display:none}.racer-stage{min-height:0;padding:10px}.racer-top{padding:6px 10px}.racer-stat{padding:3px 6px;font-size:11px}
+ .racers{grid-template-columns:minmax(0,1fr);gap:12px}.mode-button span{display:none}.racer-stage{padding:10px}.racer-top{padding:6px 10px}.racer-stat{padding:3px 6px;font-size:11px}
  .kios{min-height:96px;padding:8px 4px}.kios-icon{font-size:24px}.kios small{font-size:10px}
  .numpad button{height:42px}.q-display{font-size:26px}.q-title{font-size:17px}
+}
+
+/* Balapan layar penuh: halaman tidak bisa digulir; tiap panel menggulir sendiri bila perlu */
+.race-mode{overflow:hidden;overscroll-behavior:none}
+.race-mode #race{position:fixed;inset:0;z-index:9;display:flex;flex-direction:column;gap:12px;padding:12px;margin:0;background:radial-gradient(circle at 8% 0,#ffe7b3 0,transparent 32%),radial-gradient(circle at 96% 18%,#d6efd9 0,transparent 30%),var(--cream)}
+.race-mode .race-track{flex:none;margin:0;padding:10px 16px 12px}
+.track-tools{display:flex;gap:6px}
+.track-tools button{height:38px;min-width:38px;border:2px solid var(--line);background:white;border-radius:19px;color:var(--green);font-weight:800;font-size:15px;box-shadow:0 3px 0 var(--line)}
+.track-tools .exit{padding:0 12px;font-size:13px;color:#b5523a}
+.race-mode .racers{flex:1;min-height:0}
+.racer{display:flex;flex-direction:column;min-height:0}
+.racer-top{flex:none}
+.racer-stage{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column}
+.racer-stage>*{flex:none}
+.racer-stage .kios-grid{flex:1;max-height:560px;grid-auto-rows:1fr}
+.racer-stage .numpad{flex:1;grid-auto-rows:minmax(44px,1fr);max-height:440px}
+.racer-stage .numpad button{height:auto;font-size:clamp(20px,3vh,32px)}
+.racer-stage .next-btn{margin-top:auto;min-height:64px;font-size:18px}
+.stage-end{margin:auto}
+.racer-stage .race-actions:last-child{margin-top:auto;padding-top:12px}
+.racer-stage .race-actions.small:last-child{margin-top:8px;padding-top:0}
+@media(min-height:900px) and (min-width:1100px){.racer-stage{padding:18px}.q-title{font-size:24px}.q-text{font-size:16px}.q-display{font-size:38px}.q-feedback{font-size:14px}.kios b{font-size:17px}.kios small{font-size:13px}.kios-icon{font-size:38px}.stage-title{font-size:22px}.race-product{padding:16px}.race-product .product-icon{width:64px;height:64px;font-size:36px}.race-product .product-details b{font-size:19px}.race-product .product-details small{font-size:14px}.race-product .stepper button{width:52px;height:52px;font-size:24px}.race-product .stepper b{font-size:26px;min-width:30px}.racer-note{font-size:15px}}
+@media(max-width:760px){
+ .race-mode #race{gap:8px;padding:8px}
+ .race-mode .race-track{padding:6px 10px}.track-head{gap:6px}.track-head b{font-size:14px}.race-time{font-size:16px;padding:2px 8px}
+ .track-tools button{height:32px;min-width:32px;font-size:13px}.track-tools .exit{padding:0 8px;font-size:11px}
+ .race-mode .racers{grid-template-rows:repeat(2,minmax(0,1fr));gap:8px}
+ .racer{border-width:2px;box-shadow:0 3px 0 var(--p);border-radius:16px}
+ .racer-avatar svg{width:26px;height:36px}.racer-name b{font-size:14px}.racer-name small{display:none}.flip-btn{width:26px;height:26px}
+ .q-text{font-size:12px;margin-bottom:6px}.q-title{font-size:15px;margin:4px 0 2px}.q-answer{padding:2px 10px}.q-display{font-size:22px}.q-feedback{min-height:0;padding:6px 8px;margin:6px 0}
+ .racer-stage .numpad{gap:5px;grid-auto-rows:minmax(36px,1fr)}.racer-stage .numpad button{font-size:18px}
+ .kios{min-height:72px;padding:6px 3px}.kios-icon{font-size:20px}.kios b{font-size:12px}.stage-title{font-size:15px;margin-bottom:6px}.racer-note{margin-top:8px;padding:6px 8px;font-size:12px}
 }
