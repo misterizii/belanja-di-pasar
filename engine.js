@@ -18,14 +18,15 @@
     const budget=Math.ceil((cost+pick([8000,10000]))/10000)*10000;
     return {stalls,budget,balance:budget,lives:3,correct:0,mistakes:0,finished:false};
   }
+  const rp=n=>n.toLocaleString('id-ID');
   const total=s=>s.items.reduce((sum,i)=>sum+i.qty*i.price,0);
   function questions(stall,balance){const [a,b]=stall.items;return [
     {kind:'jumlah',title:'Berapa jumlah barangnya?',text:`Ada ${a.qty} ${a.unit} ${a.name.toLowerCase()} dan ${b.qty} ${b.unit} ${b.name.toLowerCase()}. Berapa jumlah semua barang?`,answer:a.qty+b.qty,unit:'barang',hint:`Jumlahkan kedua jumlah barang: ${a.qty} + ${b.qty}.`,formula:`${a.qty} + ${b.qty} = ${a.qty+b.qty}`},
     {kind:'kali',title:`Hitung harga ${a.name.toLowerCase()}`,text:`Harga satu ${a.unit} ${a.name.toLowerCase()} Rp${a.price.toLocaleString('id-ID')}. Berapa harga ${a.qty} ${a.unit}?`,answer:a.qty*a.price,unit:'rupiah',hint:`Perkalian adalah penjumlahan berulang. Jumlahkan ${a.price.toLocaleString('id-ID')} sebanyak ${a.qty} kali.`,formula:`${a.qty} × ${a.price.toLocaleString('id-ID')} = ${(a.qty*a.price).toLocaleString('id-ID')}`},
-    {kind:'total',title:'Berapa yang harus dibayar?',text:`Harga ${a.name.toLowerCase()} seluruhnya Rp${(a.qty*a.price).toLocaleString('id-ID')} dan ${b.name.toLowerCase()} Rp${(b.qty*b.price).toLocaleString('id-ID')}. Berapa total belanja di kios ini?`,answer:total(stall),unit:'rupiah',hint:'Jumlahkan harga kedua jenis barang, bukan harga satuannya.',formula:`${a.qty*a.price} + ${b.qty*b.price} = ${total(stall)}`},
-    {kind:'sisa',title:'Hitung sisa uang di dompet',text:`Uangmu Rp${balance.toLocaleString('id-ID')}. Belanja ini Rp${total(stall).toLocaleString('id-ID')}. Berapa sisa uangmu setelah membayar?`,answer:balance-total(stall),unit:'rupiah',hint:'Kurangi uang di dompet dengan total belanja kios ini.',formula:`${balance} − ${total(stall)} = ${balance-total(stall)}`}
+    {kind:'total',title:'Berapa yang harus dibayar?',text:`Harga ${a.name.toLowerCase()} seluruhnya Rp${(a.qty*a.price).toLocaleString('id-ID')} dan ${b.name.toLowerCase()} Rp${(b.qty*b.price).toLocaleString('id-ID')}. Berapa total belanja di kios ini?`,answer:total(stall),unit:'rupiah',hint:'Jumlahkan harga kedua jenis barang, bukan harga satuannya.',formula:`${rp(a.qty*a.price)} + ${rp(b.qty*b.price)} = ${rp(total(stall))}`},
+    {kind:'sisa',title:'Hitung sisa uang di dompet',text:`Uangmu Rp${balance.toLocaleString('id-ID')}. Belanja ini Rp${total(stall).toLocaleString('id-ID')}. Berapa sisa uangmu setelah membayar?`,answer:balance-total(stall),unit:'rupiah',hint:'Kurangi uang di dompet dengan total belanja kios ini.',formula:`${rp(balance)} − ${rp(total(stall))} = ${rp(balance-total(stall))}`}
   ];}
-  function parseAnswer(value){const v=String(value).trim();if(!/^\d+(?:[.,]\d{3})*$/.test(v))return null;return Number(v.replace(/[.,]/g,''));}
+  function parseAnswer(value){const v=String(value).trim().replace(/^rp\.?\s*/i,'').replace(/\s+/g,'');if(!/^\d+(?:[.,]\d{3})*$/.test(v))return null;return Number(v.replace(/[.,]/g,''));}
   function answer(game,expected,value){const n=parseAnswer(value);if(n===null)return {valid:false};if(game.lives===0||game.finished)return {valid:false};if(n===expected){game.correct++;return {valid:true,correct:true};}game.lives--;game.mistakes++;return {valid:true,correct:false};}
   function pay(game,stall){if(stall.done||game.lives===0||game.finished)return false;game.balance-=total(stall);stall.done=true;return true;}
   return {catalog,createGame,total,questions,parseAnswer,answer,pay};
