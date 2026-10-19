@@ -111,7 +111,7 @@ const Story=(()=>{
   if(lv)level=lv;track='ibu';mode='solo';leaveRace();setTrackTexts();
   sess=newSession(D.createTrip(level),character,playerName);
   sess.chicks=[...chickSpots].sort(()=>Math.random()-.5).slice(0,5);
-  walk(38,50);renderMap();withStory?opening():modal.close();
+  walk(38,50);renderMap();if(withStory)opening();else{$('modal-content').innerHTML='';modal.close();}
  }
  const scenes=()=>[
   {hero:'🏡 ☀️ 🐓',who:'Ibu',text:`Minggu pagi yang cerah. “${escapeHTML(playerName)}, temani Ibu belanja ke pasar, yuk!”`},
@@ -154,7 +154,7 @@ const Story=(()=>{
   if(doneCount(sess)<6){toast('Ibu masih mau belanja. Bantu semua kios dulu, ya!');return;}
   walk(50,80);
   show(`<div class="scene"><div class="scene-hero">🛺 🏡 📖</div><p class="scene-text">Belanjaan sudah lengkap. Kalian pulang naik becak. Sampai di rumah, kamu membuka buku harian untuk menulis semua yang kamu hitung hari ini.</p><div class="actions"><button class="primary" id="story-diary">Tulis buku harian ✏️</button></div></div>`);
-  $('story-diary').onclick=()=>{open(sess,'home');showAct();};
+  $('story-diary').onclick=()=>open(sess,'home')==='home-done'?diary():showAct();
  }
  function diary(){
   const t=sess.trip;
@@ -189,7 +189,7 @@ const Story=(()=>{
   act(r,d,panel){
    const s=r.sess;
    if(d.act==='stall'){const m=stallOf(d.id);if(s.done[d.id]){r.note=`✓ ${m.name} sudah dibantu. Pilih kios lain!`;return;}if(open(s,d.id)==='stall-done')r.note=`✓ ${m.name} selesai!`;return;}
-   if(d.act==='home'){if(doneCount(s)<6){r.note='Ibu masih mau belanja. Bantu semua kios dulu!';return;}open(s,'home');return;}
+   if(d.act==='home'){if(doneCount(s)<6){r.note='Ibu masih mau belanja. Bantu semua kios dulu!';return;}if(open(s,'home')==='home-done'){tone(true);return 'finish';}return;}
    if(d.act==='leave'){s.cur=null;r.note='Pilih kios berikutnya.';return;}
    const id=s.cur?.id,out=act(s,d);
    if(out==='input'){const el=panel.querySelector('[data-display]');if(el)el.textContent=s.cur.input||'?';return 'skip';}
